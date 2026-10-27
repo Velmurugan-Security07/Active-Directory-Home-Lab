@@ -1,0 +1,13 @@
+``` 
+Detection: New local user account creation / privilege group modification
+MITRE ATT&CK: T1136.001 - Create Account: Local Account
+Data source: WinEventLog:Security (EventCode 4720, 4732) + Sysmon (EventCode 1, 12, 13)
+```
+
+index="endpoint" (EventCode=4720 OR EventCode=4732 OR (sourcetype="WinEventLog:Microsoft-Windows-Sysmon/Operational" EventCode=13 TargetObject="*SAM\\Domains\\Account\\Users\\Names*"))
+| eval detection_type=case(
+    EventCode=4720, "Local account created",
+    EventCode=4732, "Account added to privileged group",
+    EventCode=13, "Sysmon registry artifact - new SAM user object")
+| table _time, detection_type, Account_Name, ComputerName, host
+| sort -_time

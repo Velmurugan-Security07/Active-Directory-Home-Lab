@@ -1,0 +1,11 @@
+``` 
+Detection: Successful logon shortly after a burst of failed logons
+MITRE ATT&CK: T1110.001 - Brute Force: Password Guessing (successful compromise)
+Data source: WinEventLog:Security (EventCode 4624, correlated with 4625)
+```
+
+index="endpoint" (EventCode=4625 OR EventCode=4624)
+| transaction Account_Name maxspan=15m startswith=(EventCode=4625) endswith=(EventCode=4624)
+| where eventcount > 5
+| table _time, Account_Name, Account_Domain, ComputerName, eventcount, duration
+| sort -_time

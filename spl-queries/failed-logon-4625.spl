@@ -1,0 +1,11 @@
+``` 
+Detection: Repeated failed logon attempts (possible brute force)
+MITRE ATT&CK: T1110.001 - Brute Force: Password Guessing
+Data source: WinEventLog:Security (EventCode 4625)
+```
+
+index="endpoint" EventCode=4625
+| stats count AS failed_attempts min(_time) AS first_attempt max(_time) AS last_attempt BY Account_Name, ComputerName
+| where failed_attempts > 10
+| convert ctime(first_attempt) ctime(last_attempt)
+| sort -failed_attempts

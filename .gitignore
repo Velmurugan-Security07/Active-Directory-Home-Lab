@@ -1,0 +1,13 @@
+# Credentials / sensitive lab artifacts - never commit these
+password.txt
+rockyou.txt
+*.pwd
+*.cred
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor files
+*.swp
+.vscode/
